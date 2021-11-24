@@ -16,13 +16,11 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public List<User> index() {  //addAllUsers
-
         return entityManager.createQuery("FROM User", User.class).getResultList();
     }
 
     @Override
     public User getUserByName(String name) {
-        //String query = "FROM users WHERE name=:name";
         try {
             return (User) entityManager
                     .createQuery("from User u inner JOIN FETCH u.roles as roles WHERE u.name = :name", User.class)
@@ -37,7 +35,6 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User show(Long id) {
-
         return entityManager.find(User.class, id);
     }
 
@@ -50,7 +47,6 @@ public class UserDaoImpl implements UserDao {
     public void update(User updatedUser, Long id) {
         entityManager.merge(updatedUser);
     }
-
 
 
     @Override
