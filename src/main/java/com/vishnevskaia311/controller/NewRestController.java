@@ -19,35 +19,39 @@ public class NewRestController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/restusers")
-    public List<User> showAllUsers() {
-        List<User> allUsers = userService.index();
-        return allUsers;
+    public NewRestController(UserService userService) {
+        this.userService = userService;
     }
 
-    @GetMapping("/restusers/{id}")
-    public User getUser(@PathVariable Long id) {
+    @GetMapping("/users")
+    public ResponseEntity<List<User>> showAllUsers() {
+        List<User> allUsers = userService.index();
+        return new ResponseEntity<>(allUsers, HttpStatus.OK);
+    }
+
+    @GetMapping("/users/{id}")
+    public ResponseEntity<User> getUser(@PathVariable Long id) {
         User user = userService.show(id);
         if (user == null) {
             throw new NoSuchUserException("There is no user with id = "
                     + id + " in database");
         }
-        return user;
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @PostMapping("/restusers")
+    @PostMapping("/users")
     public User addNewUser(@RequestBody User user){
         userService.save(user);
         return user;
     }
 
-    @PutMapping("/restusers")
+    @PutMapping("/users")
     public User updateUser(@RequestBody User user){
         userService.save(user);
         return user;
     }
 
-    @DeleteMapping("/restusers/{id}")
+    @DeleteMapping("/users/{id}")
     public String deleteUser(@PathVariable Long id){
         User user = userService.show(id);
         if(user==null){
