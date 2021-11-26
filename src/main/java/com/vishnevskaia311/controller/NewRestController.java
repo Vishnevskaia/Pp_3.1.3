@@ -26,7 +26,8 @@ public class NewRestController {
     @GetMapping("/users")
     public ResponseEntity<List<User>> showAllUsers() {
         List<User> allUsers = userService.index();
-        return new ResponseEntity<>(allUsers, HttpStatus.OK);
+
+      return new ResponseEntity<>(allUsers, HttpStatus.OK);
     }
 
     @GetMapping("/users/{id}")
