@@ -168,13 +168,20 @@ async function editUser(modal, id) {
     modal.find('.modal-footer').append(closeButton);
 
     user.then(user => {
+        let roles = ["ROLE_ADMIN", "ROLE_USER"];
         let bodyForm = `
             <form class="form-group" id="editUser">
                 <input type="text" class="form-control" id="id" name="id" value="${user.id}" disabled><br>
                 <input class="form-control" type="text" id="name" value="${user.name}"><br>
                 <input class="form-control" type="password" id="password" value="${user.password}"><br>
-                <input class="form-control" id="email" type="text" value="${user.email}"><br>
-                <input class="form-control" id="roles" type="text" value="${user.roles}"><br>
+                 <input class="form-control" type="text" id="email" value="${user.email}"><br>
+                 
+                 
+                <select class="custom-select" id="roles" name="roles" multiple>
+                <option value="ROLE_USER">ROLE_USER</option>
+                <option value="ROLE_ADMIN">ROLE_ADMIN</option>
+                </select>
+  
             </form>
         `;
         modal.find('.modal-body').append(bodyForm);
@@ -185,7 +192,9 @@ async function editUser(modal, id) {
         let name = modal.find("#name").val().trim();
         let password = modal.find("#password").val().trim();
         let email = modal.find("#email").val().trim();
-        let roles = modal.find("#roles").val().trim();
+
+        let roles = modal.find('select[name=roles]').val();
+
         let data = {
             id: id,
             name: name,
