@@ -51,27 +51,33 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http.formLogin()
+         http.formLogin()
                 .successHandler(successUserHandler)
-                .loginProcessingUrl("/login")
-                .usernameParameter("j_username")
-                .passwordParameter("j_password")
                 .permitAll();
-
-
         http.logout()
-                // разрешаем делать логаут всем
                 .permitAll()
-                // указываем URL логаута
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                // указываем URL при удачном логауте
                 .logoutSuccessUrl("/login")
-                //выклчаем кроссдоменную секьюрность (на этапе обучения неважна)
                 .and().csrf().disable();
+        http
+                // делаем страницу регистрации недоступной для авторизированных пользователей
+                .authorizeRequests()
 
-        http.authorizeRequests()
-                .antMatchers("/").authenticated();
+
+                //страницы аутентификаци доступна всем
+                .antMatchers("/login").anonymous()
+
+                // защищенные URL
+                .antMatchers("/admin/**").hasAnyRole("ADMIN")
+
+
+                .antMatchers("/user/**").hasAnyRole( "USER")
+
+                .antMatchers("/hello").access("hasAnyRole('ADMIN', 'USER')").anyRequest().authenticated()
+                .and().csrf().disable();
     }
+
+
 
     @Autowired
     public void setUserDetailsService(UserDetailsService userDetailsService) {

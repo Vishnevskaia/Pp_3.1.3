@@ -44,17 +44,12 @@ public class Role implements GrantedAuthority {
 
     @Override
     public String toString() {
-        role
-                .replace("[", "")
-                .replace("]", "");
         return role;
 
     }
 
     public String getRole() {
-        return role.replace("[", "")
-                .replace("]", "");
-
+        return role;
     }
 
 

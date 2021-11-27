@@ -47,12 +47,6 @@ public class NewRestController {
         return user;
     }
 
-//    @PutMapping("/users")
-//    public User updateUser( @RequestBody User user){
-//        userService.save(user);
-//        return user;
-//    }
-
     @PutMapping("/users/{id}")
     public User updateUser(@PathVariable("id") Long id, @RequestBody User user){
         userService.update(user, id);
@@ -72,8 +66,5 @@ public class NewRestController {
         userService.delete(id);
         return "User with id= " + id + " was deleted";
     }
-
-
-
 
 }

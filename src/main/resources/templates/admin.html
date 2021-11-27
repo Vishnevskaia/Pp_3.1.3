@@ -55,10 +55,10 @@
     <div class="  col-md-2">
         <ul class="nav flex-column nav-pills ">
             <li class="nav-item">
-                <a class="nav-link active" data-toggle="tab" href="/user">Admin</a>
+                <a class="nav-link active" data-toggle="tab" href="/admin">Admin</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="">User</a>
+                <a class="nav-link" href="/user">User</a>
             </li>
         </ul>
 
@@ -133,16 +133,41 @@
 
 
 
+
+
+
+
+
+
+
                 <!--форма заполнения нового юзера и две кнопки-->
                 <div class="container-fluid">
                     <div class="d-flex justify-content-right">
 
                         <div class="form-group align-items-center">
+
+
+
+
+
                             <form id="defaultSomeForm" data-hidden=true style="display: none">
-                                <input class="form-control" id="AddNewUserLogin" type="text" placeholder="login"><br>
-                                <input class="form-control" id="AddNewUserPassword" type="password" placeholder="password"><br>
-                                <input class="form-control" id="AddNewUserAge" type="number" placeholder="age"><br>
-                                <button class="btn btn-primary mb-2" type="button" id="addNewUserButton">Add new user</button>
+                                <label>Name</label>
+                                <input class="form-control" id="newName" type="text"
+                                       placeholder="Name"><br>
+                                <label>Email</label>
+                                <input class="form-control" id="newEmail" type="text"
+                                       placeholder="Email"><br>
+                                <label>Password</label>
+                                <input class="form-control" id="newPassword" type="password"
+                                       placeholder="Password"><br>
+                                <label>Role</label>
+                                <select class="custom-select" id="newRoles" name="newRoles" multiple>
+                                    <option value="ROLE_USER">ROLE_USER</option>
+                                    <option value="ROLE_ADMIN">ROLE_ADMIN</option>
+                                </select>
+
+                                <button class="btn btn-primary mb-2" type="button"
+                                        id="addNewUserButton">Add new user</button>
                             </form>
 <!--                            <div class="p-2">-->
 <!--                                <button class="btn btn-outline-success" id="SliderNewUserForm">Add new user</button>-->

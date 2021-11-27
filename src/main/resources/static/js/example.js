@@ -3,6 +3,7 @@ $(async function () {
     getNewUserForm();
     getDefaultModal();
     addNewUser();
+    getTableWithUser();
 })
 
 
@@ -27,6 +28,13 @@ const userFetchService = {
     }),
     deleteUser: async (id) => await fetch(`api/users/${id}`, {method: 'DELETE', headers: userFetchService.head})
 }
+
+
+
+
+
+
+/// таблица  всех юзеров-----------------------------
 
 async function getTableWithUsers() {
     const admin = document.getElementById("AdminPannel");
@@ -72,8 +80,14 @@ async function getTableWithUsers() {
         })
 
 
-    // обрабатываем нажатие на любую из кнопок edit или delete
-    // достаем из нее данные и отдаем модалке, которую к тому же открываем
+
+
+
+
+
+/// логика кнопок EDIT DELETE -----------------------------
+
+
     $("#mainTableWithUsers").find('button').on('click', (event) => {
         let defaultModal = $('#someDefaultModal');
         let targetButton = $(event.target);
@@ -88,9 +102,7 @@ async function getTableWithUsers() {
 }
 
 
-//вкладка new user MDN mouseevent
-// const navNesUser = document.getElementById("nav-newUser");
-// navNesUser.onclick =() => {}
+/// NEW USER открытие формы ---------------------------------
 
 
 async function getNewUserForm() {
@@ -127,8 +139,12 @@ async function getNewUserForm() {
 }
 
 
-// что то деалем при открытии модалки и при закрытии
-// основываясь на ее дата атрибутах
+
+
+// ЛОГИКА МОДАЛЬНЫХ ОКОН EDIT, DELETE ---------------------------------
+
+
+
 async function getDefaultModal() {
     $('#someDefaultModal').modal({
         keyboard: true,
@@ -155,7 +171,8 @@ async function getDefaultModal() {
 }
 
 
-// редактируем юзера из модалки редактирования, забираем данные, отправляем
+// EDIT USER ---------------------------------
+
 async function editUser(modal, id) {
     let preuser = await userFetchService.findOneUser(id);
     let user = preuser.json();
@@ -168,7 +185,7 @@ async function editUser(modal, id) {
     modal.find('.modal-footer').append(closeButton);
 
     user.then(user => {
-        let roles = ["ROLE_ADMIN", "ROLE_USER"];
+
         let bodyForm = `
             <form class="form-group" id="editUser">
                 <input type="text" class="form-control" id="id" name="id" value="${user.id}" disabled><br>
@@ -195,6 +212,8 @@ async function editUser(modal, id) {
 
         let roles = modal.find('select[name=roles]').val();
 
+
+
         let data = {
             id: id,
             name: name,
@@ -220,7 +239,12 @@ async function editUser(modal, id) {
     })
 }
 
-// удаляем юзера из модалки удаления
+
+
+
+
+// DELETE USER ---------------------------------
+
 async function deleteUser(modal, id) {
     await userFetchService.deleteUser(id);
     getTableWithUsers();
@@ -231,26 +255,33 @@ async function deleteUser(modal, id) {
 }
 
 
+
+// NEW USER ---------------------------------
+
 async function addNewUser() {
     $('#addNewUserButton').click(async () => {
         let addUserForm = $('#defaultSomeForm')
-        let login = addUserForm.find('#AddNewUserLogin').val().trim();
-        let password = addUserForm.find('#AddNewUserPassword').val().trim();
-        let age = addUserForm.find('#AddNewUserAge').val().trim();
+        let name = addUserForm.find('#newName').val().trim();
+        let email = addUserForm.find('#newEmail').val().trim();
+        let password = addUserForm.find('#newPassword').val().trim();
+        let roles = addUserForm.find('select[name=newRoles]').val();
         let data = {
-            login: login,
+            name: name,
+            email: email,
             password: password,
-            age: age
+            roles: roles
         }
         const response = await userFetchService.addNewUser(data);
         if (response.ok) {
             getTableWithUsers();
-            addUserForm.find('#AddNewUserLogin').val('');
-            addUserForm.find('#AddNewUserPassword').val('');
-            addUserForm.find('#AddNewUserAge').val('');
+            addUserForm.find('#newName').val('');
+            addUserForm.find('#newEmail').val('');
+            addUserForm.find('#newPassword').val('');
+            addUserForm.find('select[name=newRoles]').val('');
         } else {
             let body = await response.json();
-            let alert = `<div class="alert alert-danger alert-dismissible fade show col-12" role="alert" id="sharaBaraMessageError">
+            let alert = `<div class="alert alert-danger alert-dismissible fade show col-12"
+ role="alert" id="sharaBaraMessageError">
                             ${body.info}
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
