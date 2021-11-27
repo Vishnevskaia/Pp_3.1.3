@@ -15,8 +15,16 @@ const userFetchService = {
     // bodyAdd : async function(user) {return {'method': 'POST', 'headers': this.head, 'body': user}},
     findAllUsers: async () => await fetch('api/users'),
     findOneUser: async (id) => await fetch(`api/users/${id}`),
-    addNewUser: async (user) => await fetch('api/users', {method: 'POST', headers: userFetchService.head, body: JSON.stringify(user)}),
-    updateUser: async (user, id) => await fetch(`api/users/${id}`, {method: 'PUT', headers: userFetchService.head, body: JSON.stringify(user)}),
+    addNewUser: async (user) => await fetch('api/users', {
+        method: 'POST',
+        headers: userFetchService.head,
+        body: JSON.stringify(user)
+    }),
+    updateUser: async (user, id) => await fetch(`api/users/${id}`, {
+        method: 'PUT',
+        headers: userFetchService.head,
+        body: JSON.stringify(user)
+    }),
     deleteUser: async (id) => await fetch(`api/users/${id}`, {method: 'DELETE', headers: userFetchService.head})
 }
 
@@ -24,53 +32,60 @@ async function getTableWithUsers() {
     const admin = document.getElementById("AdminPannel");
     console.dir(admin);
     setTimeout(() => {
-    admin.style.color = "magenta"}, 5000)
+        admin.style.color = "magenta"
+    }, 15000)
 
     let button2 = $(`#nav-userstable`);
 
+    let table = $('#mainTableWithUsers tbody');
+    table.empty();
 
-        let table = $('#mainTableWithUsers tbody');
-        table.empty();
+    await userFetchService.findAllUsers()
+        .then(res => res.json())
+        .then(users => {
+            users.forEach(user => {
+                let userRoles = "";
+                for(let i = 0; i < user.roles.length; i++) {
+                    userRoles += user.roles[i].role;
+                    userRoles += " ";
+                }
 
-        await userFetchService.findAllUsers()
-            .then(res => res.json())
-            .then(users => {
-                users.forEach(user => {
-                    let tableFilling = `$(
+                let tableFilling = `$(
                         <tr>
                             <td>${user.id}</td>
                             <td>${user.name}</td>
-                            <td>${user.email}...</td>                      
+                            <td>${user.email}</td>      
+                            <td> ${userRoles}              
+                            </td>               
                             <td>
-                                <button type="button" data-userid="${user.id}" data-action="edit" class="btn btn-outline-secondary" 
+                                <button type="button" data-userid="${user.id}" data-action="edit" class="btn btn-success" 
                                 data-toggle="modal" data-target="#someDefaultModal">Edit</button>
                             </td>
                             <td>
-                                <button type="button" data-userid="${user.id}" data-action="delete" class="btn btn-outline-danger" 
+                                <button type="button" data-userid="${user.id}" data-action="delete" class="btn btn-danger" 
                                 data-toggle="modal" data-target="#someDefaultModal">Delete</button>
                             </td>
                         </tr>
                 )`;
-                    table.append(tableFilling);
-                })
+                table.append(tableFilling);
             })
-
-        // обрабатываем нажатие на любую из кнопок edit или delete
-        // достаем из нее данные и отдаем модалке, которую к тому же открываем
-        $("#mainTableWithUsers").find('button').on('click', (event) => {
-            let defaultModal = $('#someDefaultModal');
-            let targetButton = $(event.target);
-            let buttonUserId = targetButton.attr('data-userid');
-            let buttonAction = targetButton.attr('data-action');
-
-            defaultModal.attr('data-userid', buttonUserId);
-            defaultModal.attr('data-action', buttonAction);
-            defaultModal.modal('show');
         })
 
+
+    // обрабатываем нажатие на любую из кнопок edit или delete
+    // достаем из нее данные и отдаем модалке, которую к тому же открываем
+    $("#mainTableWithUsers").find('button').on('click', (event) => {
+        let defaultModal = $('#someDefaultModal');
+        let targetButton = $(event.target);
+        let buttonUserId = targetButton.attr('data-userid');
+        let buttonAction = targetButton.attr('data-action');
+
+        defaultModal.attr('data-userid', buttonUserId);
+        defaultModal.attr('data-action', buttonAction);
+        defaultModal.modal('show');
+    })
+
 }
-
-
 
 
 //вкладка new user MDN mouseevent
@@ -78,38 +93,38 @@ async function getTableWithUsers() {
 // navNesUser.onclick =() => {}
 
 
-    async function getNewUserForm() {
-        let button = $(`#SliderNewUserForm`);
-        let form = $(`#defaultSomeForm`)
-        let table = document.getElementById("mainTableWithUsers");
-        let button2 = $(`#nav-userstable`);
-        let form2 = $(`#usersTableForm`);
+async function getNewUserForm() {
+    let button = $(`#SliderNewUserForm`);
+    let form = $(`#defaultSomeForm`)
+    let table = document.getElementById("mainTableWithUsers");
+    let button2 = $(`#nav-userstable`);
+    let form2 = $(`#usersTableForm`);
 
 
-        button.on('click', () => {
-            if (form.attr("data-hidden") === "true") {
-                form.attr('data-hidden', 'false');
-                form.show();
-                button.text('Hide panel');
+    button.on('click', () => {
+        if (form.attr("data-hidden") === "true") {
+            form.attr('data-hidden', 'false');
+            form.show();
+            button.text('Hide panel');
 
-                 table.style.display = 'none';
-            } else {
-                form.attr('data-hidden', 'true');
-                form.hide();
-                button.text('New User');
+            table.style.display = 'none';
+        } else {
+            form.attr('data-hidden', 'true');
+            form.hide();
+            button.text('New User');
 
-            }
-        })
+        }
+    })
 
-        button2.on('click', () => {
+    button2.on('click', () => {
 
             // getTableWithUsers();
 
-             table.style.display = '';
-            }
-        )
+            table.style.display = '';
+        }
+    )
 
-    }
+}
 
 
 // что то деалем при открытии модалки и при закрытии
@@ -156,9 +171,10 @@ async function editUser(modal, id) {
         let bodyForm = `
             <form class="form-group" id="editUser">
                 <input type="text" class="form-control" id="id" name="id" value="${user.id}" disabled><br>
-                <input class="form-control" type="text" id="login" value="${user.login}"><br>
-                <input class="form-control" type="password" id="password"><br>
-                <input class="form-control" id="age" type="number" value="${user.age}">
+                <input class="form-control" type="text" id="name" value="${user.name}"><br>
+                <input class="form-control" type="password" id="password" value="${user.password}"><br>
+                <input class="form-control" id="email" type="text" value="${user.email}"><br>
+                <input class="form-control" id="roles" type="text" value="${user.roles}"><br>
             </form>
         `;
         modal.find('.modal-body').append(bodyForm);
@@ -166,14 +182,16 @@ async function editUser(modal, id) {
 
     $("#editButton").on('click', async () => {
         let id = modal.find("#id").val().trim();
-        let login = modal.find("#login").val().trim();
+        let name = modal.find("#name").val().trim();
         let password = modal.find("#password").val().trim();
-        let age = modal.find("#age").val().trim();
+        let email = modal.find("#email").val().trim();
+        let roles = modal.find("#roles").val().trim();
         let data = {
             id: id,
-            login: login,
+            name: name,
             password: password,
-            age: age
+            email: email,
+            roles: roles
         }
         const response = await userFetchService.updateUser(data, id);
 
@@ -193,7 +211,6 @@ async function editUser(modal, id) {
     })
 }
 
-
 // удаляем юзера из модалки удаления
 async function deleteUser(modal, id) {
     await userFetchService.deleteUser(id);
@@ -205,12 +222,8 @@ async function deleteUser(modal, id) {
 }
 
 
-
-
-
-
 async function addNewUser() {
-    $('#addNewUserButton').click(async () =>  {
+    $('#addNewUserButton').click(async () => {
         let addUserForm = $('#defaultSomeForm')
         let login = addUserForm.find('#AddNewUserLogin').val().trim();
         let password = addUserForm.find('#AddNewUserPassword').val().trim();

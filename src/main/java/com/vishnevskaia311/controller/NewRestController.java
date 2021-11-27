@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -46,11 +47,19 @@ public class NewRestController {
         return user;
     }
 
-    @PutMapping("/users")
-    public User updateUser(@RequestBody User user){
-        userService.save(user);
+//    @PutMapping("/users")
+//    public User updateUser( @RequestBody User user){
+//        userService.save(user);
+//        return user;
+//    }
+
+    @PutMapping("/users/{id}")
+    public User updateUser(@PathVariable("id") Long id, @RequestBody User user){
+        userService.update(user, id);
         return user;
     }
+
+
 
     @DeleteMapping("/users/{id}")
     public String deleteUser(@PathVariable Long id){

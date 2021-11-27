@@ -16,16 +16,18 @@
 
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+
     <div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link">with roles: </a>
+                <a class="nav-link" th:utext="${user.getEmail()}">with roles: </a>
             </li>
             <li class="nav-item active">
                 <a class="nav-link">with roles: </a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link">Notifications</a>
+                <a class="nav-link" th:utext="${user.getRolesToString()}">Notifications</a>
             </li>
 
             <li class="nav-item dropdown">
@@ -112,6 +114,7 @@
                                     <th>ID</th>
                                     <th>Username</th>
                                     <th>Email</th>
+                                    <th>Roles</th>
                                     <th>Edit</th>
                                     <th>Delete</th>
                                 </tr>
