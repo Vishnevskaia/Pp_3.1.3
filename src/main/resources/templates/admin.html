@@ -53,7 +53,7 @@
     <div class="  col-md-2">
         <ul class="nav flex-column nav-pills ">
             <li class="nav-item">
-                <a class="nav-link active" data-toggle="tab" href="">Admin</a>
+                <a class="nav-link active" data-toggle="tab" href="/user">Admin</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="">User</a>
@@ -73,14 +73,25 @@
         <!-- Вкладки -->
 
         <ul class="nav nav-tabs" id="myTab" role="tablist">
+<!--            <li class="nav-item">-->
+<!--                <a class="nav-link active" id="nav-userstable" data-toggle="tab" href="#userstable"-->
+<!--                   role="tab" aria-controls="home" aria-selected="true">Users table</a>-->
+<!--            </li>-->
             <li class="nav-item">
-                <a class="nav-link active" id="nav-userstable" data-toggle="tab" href="#userstable"
-                   role="tab" aria-controls="home" aria-selected="true">Users table</a>
+                <div class="p-2">
+                    <button class="btn btn-link active" id="nav-userstable">Users table</button>
+                </div>
             </li>
+
 <!--            <li class="nav-item">-->
 <!--                <a class="nav-link" id="nav-newUser" data-toggle="tab"-->
 <!--                   role="tab" aria-controls="profile" aria-selected="false">New user</a>-->
 <!--            </li>-->
+            <li class="nav-item">
+            <div class="p-2">
+                <button class="btn btn-link" id="SliderNewUserForm">New User</button>
+            </div>
+            </li>
 
         </ul>
 
@@ -90,7 +101,7 @@
 
 
                 <!-- Таблица Юзерс  -->
-
+                <form id="usersTableForm" data-hidden=false>
                 <div class="tab-pane fade show active" >
 
                     <div class="tab-pane fade show active" >
@@ -104,6 +115,9 @@
                                     <th>Edit</th>
                                     <th>Delete</th>
                                 </tr>
+<!--                                <div class="p-2">-->
+<!--                                    <button class="btn btn-outline-success" id="SliderNewUserForm">Add new user</button>-->
+<!--                                </div>-->
                                 </thead>
                                 <tbody>
                                 </tbody>
@@ -111,13 +125,14 @@
                         </div>
                     </div>
                 </div>
+                </form>
 
 
 
 
                 <!--форма заполнения нового юзера и две кнопки-->
                 <div class="container-fluid">
-                    <div class="d-flex justify-content-center">
+                    <div class="d-flex justify-content-right">
 
                         <div class="form-group align-items-center">
                             <form id="defaultSomeForm" data-hidden=true style="display: none">
@@ -126,13 +141,17 @@
                                 <input class="form-control" id="AddNewUserAge" type="number" placeholder="age"><br>
                                 <button class="btn btn-primary mb-2" type="button" id="addNewUserButton">Add new user</button>
                             </form>
-                            <div class="p-2">
-                                <button class="btn btn-outline-success" id="SliderNewUserForm">Add new user</button>
-                            </div>
+<!--                            <div class="p-2">-->
+<!--                                <button class="btn btn-outline-success" id="SliderNewUserForm">Add new user</button>-->
+<!--                            </div>-->
                         </div>
 
                     </div>
                 </div>
+
+
+
+
 
 
 
@@ -158,6 +177,10 @@
                         </div>
                     </div>
                 </div>
+
+
+
+
 
 
 

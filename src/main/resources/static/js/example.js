@@ -24,17 +24,19 @@ async function getTableWithUsers() {
     const admin = document.getElementById("AdminPannel");
     console.dir(admin);
     setTimeout(() => {
-    admin.style.color = "dark-blue"}, 15000)
+    admin.style.color = "magenta"}, 5000)
+
+    let button2 = $(`#nav-userstable`);
 
 
-    let table = $('#mainTableWithUsers tbody');
-    table.empty();
+        let table = $('#mainTableWithUsers tbody');
+        table.empty();
 
-    await userFetchService.findAllUsers()
-        .then(res => res.json())
-        .then(users => {
-            users.forEach(user => {
-                let tableFilling = `$(
+        await userFetchService.findAllUsers()
+            .then(res => res.json())
+            .then(users => {
+                users.forEach(user => {
+                    let tableFilling = `$(
                         <tr>
                             <td>${user.id}</td>
                             <td>${user.name}</td>
@@ -49,22 +51,23 @@ async function getTableWithUsers() {
                             </td>
                         </tr>
                 )`;
-                table.append(tableFilling);
+                    table.append(tableFilling);
+                })
             })
+
+        // обрабатываем нажатие на любую из кнопок edit или delete
+        // достаем из нее данные и отдаем модалке, которую к тому же открываем
+        $("#mainTableWithUsers").find('button').on('click', (event) => {
+            let defaultModal = $('#someDefaultModal');
+            let targetButton = $(event.target);
+            let buttonUserId = targetButton.attr('data-userid');
+            let buttonAction = targetButton.attr('data-action');
+
+            defaultModal.attr('data-userid', buttonUserId);
+            defaultModal.attr('data-action', buttonAction);
+            defaultModal.modal('show');
         })
 
-    // обрабатываем нажатие на любую из кнопок edit или delete
-    // достаем из нее данные и отдаем модалке, которую к тому же открываем
-    $("#mainTableWithUsers").find('button').on('click', (event) => {
-        let defaultModal = $('#someDefaultModal');
-        let targetButton = $(event.target);
-        let buttonUserId = targetButton.attr('data-userid');
-        let buttonAction = targetButton.attr('data-action');
-
-        defaultModal.attr('data-userid', buttonUserId);
-        defaultModal.attr('data-action', buttonAction);
-        defaultModal.modal('show');
-    })
 }
 
 
@@ -78,17 +81,34 @@ async function getTableWithUsers() {
     async function getNewUserForm() {
         let button = $(`#SliderNewUserForm`);
         let form = $(`#defaultSomeForm`)
+        let table = document.getElementById("mainTableWithUsers");
+        let button2 = $(`#nav-userstable`);
+        let form2 = $(`#usersTableForm`);
+
+
         button.on('click', () => {
             if (form.attr("data-hidden") === "true") {
                 form.attr('data-hidden', 'false');
                 form.show();
                 button.text('Hide panel');
+
+                 table.style.display = 'none';
             } else {
                 form.attr('data-hidden', 'true');
                 form.hide();
-                button.text('Show panel');
+                button.text('New User');
+
             }
         })
+
+        button2.on('click', () => {
+
+            // getTableWithUsers();
+
+             table.style.display = '';
+            }
+        )
+
     }
 
 
@@ -179,7 +199,7 @@ async function deleteUser(modal, id) {
     await userFetchService.deleteUser(id);
     getTableWithUsers();
     modal.find('.modal-title').html('');
-    modal.find('.modal-body').html('User was deleted');
+    modal.find('.modal-body').html('User (id = ' + id + ') was deleted');
     let closeButton = `<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>`
     modal.find('.modal-footer').append(closeButton);
 }
